@@ -234,6 +234,7 @@ class _SignUpState extends State<SignUp> {
           Container(
               width: 250.0,
               child: TextField(
+                onChanged: (value) => user = value.trim(),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.supervised_user_circle,
