@@ -99,6 +99,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gastogo/utility/my_style.dart';
+import 'package:gastogo/utility/normal_dialog.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -144,7 +145,21 @@ class _SignUpState extends State<SignUp> {
         width: 250.0,
         child: RaisedButton(
           color: MyStyle().buttonColor,
-          onPressed: () {},
+          onPressed: () {
+            print(
+                'name = $name, user = $user, password = $password, phonenum = $phonenum, choosType = $chooseType');
+            if (name == null ||
+                name.isEmpty ||
+                user == null ||
+                user.isEmpty ||
+                password == null ||
+                password.isEmpty ||
+                phonenum == null ||
+                phonenum.isEmpty) {
+              print('กรุณากรอกข้อมูลให้ครบด้วยค่ะ');
+              normalDialog(context, 'กรุณากรอกข้อมูลให้ครบด้วยค่ะ');
+            }
+          },
           child: Text(
             'Register',
             style: TextStyle(color: MyStyle().lighttextColor),
@@ -258,6 +273,7 @@ class _SignUpState extends State<SignUp> {
           Container(
               width: 250.0,
               child: TextField(
+                onChanged: (value) => password = value.trim(),
                 obscureText: true,
                 decoration: InputDecoration(
                   prefixIcon: Icon(
@@ -282,6 +298,7 @@ class _SignUpState extends State<SignUp> {
           Container(
               width: 250.0,
               child: TextField(
+                onChanged: (value) => phonenum = value.trim(),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.phone,
