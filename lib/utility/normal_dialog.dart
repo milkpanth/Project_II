@@ -9,7 +9,7 @@ Future<void> normalDialog(BuildContext context, String message) async {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            OutlineButton(
+            FlatButton(
               onPressed: () => Navigator.pop(context),
               child: Text(
                 'OK',
