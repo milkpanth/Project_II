@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gastogo/screens/major.dart';
 // import 'package:gastogo/screens/signingg.dart';
 import 'package:gastogo/utility/my_style.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -94,6 +97,45 @@ class _SignInState extends State<SignIn> {
               borderSide: BorderSide(color: MyStyle().primaryColor)),
         ),
       ));
+
+  Future<void> main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    UserCredential userCredential;
+    try {
+      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: "barry.allen@example.com",
+        password: "SuperSecretPassword!",
+      );
+      debugPrint('${userCredential.user.toString()}');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
+
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    firestore
+        .collection('Usertable')
+        .doc('User')
+        .get()
+        .then((DocumentSnapshot document) => debugPrint('${document.data()}'));
+
+    firestore
+        .collection('Usertable')
+        .add({
+          //'UID': "${userCredential.user.uid}",
+          'full_name': "fullName", // name
+          'password': "passworf", // Stokes and Sons
+          'phonenumber': "phonenumber" // 0637966241
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 }
 
 //Widget loginwithGoogleButton() => Container(

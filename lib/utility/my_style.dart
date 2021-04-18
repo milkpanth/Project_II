@@ -6,6 +6,7 @@ class MyStyle {
   Color buttonColor = Colors.blue[300];
   Color darktextColor = Colors.black;
   Color lighttextColor = Colors.white;
+  Color gastext = Colors.black;
 
   SizedBox buildSizedBox() => SizedBox(
         width: 8.0,

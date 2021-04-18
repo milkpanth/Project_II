@@ -100,6 +100,9 @@
 import 'package:flutter/material.dart';
 import 'package:gastogo/utility/my_style.dart';
 import 'package:gastogo/utility/normal_dialog.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -108,7 +111,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   String chooseType;
-  String name, user, password;
+  String name, email, password;
   String phonenum;
 
   @override
@@ -126,7 +129,7 @@ class _SignUpState extends State<SignUp> {
           MyStyle().buildSizedBox(),
           nameForm(),
           MyStyle().buildSizedBox(),
-          userForm(),
+          emailForm(),
           MyStyle().buildSizedBox(),
           passwordForm(),
           MyStyle().buildSizedBox(),
@@ -145,13 +148,14 @@ class _SignUpState extends State<SignUp> {
         width: 250.0,
         child: RaisedButton(
           color: MyStyle().buttonColor,
-          onPressed: () {
+          onPressed: Signupwithfirebase() 
+          {
             print(
-                'name = $name, user = $user, password = $password, phonenum = $phonenum, choosType = $chooseType');
+                'name = $name, email = $email, password = $password, phonenum = $phonenum, choosType = $chooseType');
             if (name == null ||
                 name.isEmpty ||
-                user == null ||
-                user.isEmpty ||
+                email == null ||
+                email.isEmpty ||
                 password == null ||
                 password.isEmpty ||
                 phonenum == null ||
@@ -243,13 +247,13 @@ class _SignUpState extends State<SignUp> {
         ],
       );
 
-  Widget userForm() => Row(
+  Widget emailForm() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
               width: 250.0,
               child: TextField(
-                onChanged: (value) => user = value.trim(),
+                onChanged: (value) => email = value.trim(),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.supervised_user_circle,
@@ -257,7 +261,7 @@ class _SignUpState extends State<SignUp> {
                     color: MyStyle().textColor,
                   ),
                   labelStyle: TextStyle(color: MyStyle().textColor),
-                  labelText: 'User : ',
+                  labelText: 'E-mail : ',
                   enabledBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: MyStyle().textColor)),
                   focusedBorder: OutlineInputBorder(
@@ -331,4 +335,46 @@ class _SignUpState extends State<SignUp> {
           MyStyle().showLogo(),
         ],
       );
+
+  void Signupwithfirebase() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    try {
+      final UserCredential userCredential =
+          await auth.createUserWithEmailAndPassword(
+        email: "$email",
+        password: "$password",
+      );
+      debugPrint('${userCredential.user.toString()}');
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // firestore
+    //     .collection('Usertable')
+    //     .doc('User')
+    //     .get()
+    //     .then((DocumentSnapshot document) => debugPrint('${document.data()}'));
+
+    firestore
+        .collection('Usertable')
+        .add({
+          //'UID': "${userCredential.user.uid}",
+          'full_name': "fullName", // nicha
+          'email': "email", // nicha@gmail.com
+          'password': "password", // password
+          'phonenumber': "phonenumber", // 0637966241
+          'chooseType': "" // user or shop
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+  }
 }
