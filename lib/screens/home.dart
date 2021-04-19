@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gastogo/screens/promote.dart';
 import 'package:gastogo/screens/signin.dart';
 import 'package:gastogo/screens/signup.dart';
 import 'package:gastogo/utility/my_style.dart';
@@ -17,7 +18,7 @@ class _HomeState extends State<Home> {
         title: Text('GastoGo'),
       ),
       drawer: buildDrawer(),
-      body: Major(),
+      body: Promote(),
       // body: Row(
       //   children: <Widget>[
       //     Major(),

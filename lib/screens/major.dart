@@ -30,7 +30,7 @@ class MajorState extends State<Major> {
           Column(
             //mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Container(
                 width: MediaQuery.of(context).size.width * .8,
                 padding: const EdgeInsets.symmetric(
@@ -38,9 +38,9 @@ class MajorState extends State<Major> {
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.lightBlue[200],
-                  border: Border.all(),
-                ),
+                    color: Colors.lightBlue[200],
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(10)),
                 child: Column(
                   children: <Widget>[
                     Row(
@@ -72,9 +72,9 @@ class MajorState extends State<Major> {
                                 vertical: 10,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.blue[300],
-                                border: Border.all(),
-                              ),
+                                  color: Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Text(
                                 'ยูนิคแก๊ส',
                                 textAlign: TextAlign.center,
@@ -101,9 +101,9 @@ class MajorState extends State<Major> {
                                 vertical: 10,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.blue[300],
-                                border: Border.all(),
-                              ),
+                                  color: Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Text(
                                 'สยามแก๊ส',
                                 textAlign: TextAlign.center,
@@ -135,9 +135,9 @@ class MajorState extends State<Major> {
                                 vertical: 10,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.blue[300],
-                                border: Border.all(),
-                              ),
+                                  color: Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Text(
                                 'ปตท',
                                 textAlign: TextAlign.center,
@@ -164,9 +164,9 @@ class MajorState extends State<Major> {
                                 vertical: 10,
                               ),
                               decoration: BoxDecoration(
-                                color: Colors.blue[300],
-                                border: Border.all(),
-                              ),
+                                  color: Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Text(
                                 'เวิลด์แก๊ส',
                                 textAlign: TextAlign.center,
