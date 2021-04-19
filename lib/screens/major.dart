@@ -197,6 +197,7 @@ class MajorState extends State<Major> {
                 decoration: BoxDecoration(
                   color: Colors.lightBlue[200],
                   border: Border.all(),
+                  borderRadius: BorderRadius.circular(10)),
                 ),
                 //width: 200,
                 child: Column(
