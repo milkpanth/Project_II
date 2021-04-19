@@ -1,9 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gastogo/screens/major.dart';
 // import 'package:gastogo/screens/signingg.dart';
 import 'package:gastogo/utility/my_style.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SignIn extends StatefulWidget {
@@ -12,6 +11,10 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  String chooseType;
+  String name, email, password;
+  String phonenumber;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +34,7 @@ class _SignInState extends State<SignIn> {
                 MyStyle().buildSizedBox(),
                 MyStyle().showName('GastoGo'),
                 MyStyle().buildSizedBox(),
-                userForm(),
+                emailForm(),
                 MyStyle().buildSizedBox(),
                 //buildSizedBox(),
                 passwordForm(),
@@ -50,10 +53,11 @@ class _SignInState extends State<SignIn> {
         width: 250.0,
         child: RaisedButton(
           color: MyStyle().buttonColor,
-          onPressed: () => setState(() {
+          onPressed: () async {
+            await loginwithfirebase();
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Major()));
-          }),
+          },
           child: Text(
             'Log In',
             style: TextStyle(color: MyStyle().lighttextColor),
@@ -63,16 +67,21 @@ class _SignInState extends State<SignIn> {
 
   // SizedBox buildSizedBox() => SizedBox();
 
-  Widget userForm() => Container(
+  Widget emailForm() => Container(
       width: 250.0,
       child: TextField(
+        onChanged: (val) {
+          setState(() {
+            email = val;
+          });
+        },
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.account_box,
             color: MyStyle().textColor,
           ),
           labelStyle: TextStyle(color: MyStyle().textColor),
-          labelText: 'User : ',
+          labelText: 'E-mail : ',
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: MyStyle().textColor)),
           focusedBorder: OutlineInputBorder(
@@ -83,6 +92,11 @@ class _SignInState extends State<SignIn> {
   Widget passwordForm() => Container(
       width: 250.0,
       child: TextField(
+        onChanged: (val) {
+          setState(() {
+            password = val;
+          });
+        },
         obscureText: true,
         decoration: InputDecoration(
           prefixIcon: Icon(
@@ -98,43 +112,30 @@ class _SignInState extends State<SignIn> {
         ),
       ));
 
-  Future<void> main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-
+  Future<void> loginwithfirebase() async {
     FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    await auth.signOut();
     UserCredential userCredential;
     try {
-      userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: "barry.allen@example.com",
-        password: "SuperSecretPassword!",
+      userCredential = await auth.signInWithEmailAndPassword(
+        email: "$email",
+        password: "$password",
       );
       debugPrint('${userCredential.user.toString()}');
     } on FirebaseAuthException catch (e) {
+      debugPrint('$e');
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
     }
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    firestore
+    QuerySnapshot query = await firestore
         .collection('Usertable')
-        .doc('User')
-        .get()
-        .then((DocumentSnapshot document) => debugPrint('${document.data()}'));
-
-    firestore
-        .collection('Usertable')
-        .add({
-          //'UID': "${userCredential.user.uid}",
-          'full_name': "fullName", // name
-          'password': "passworf", // Stokes and Sons
-          'phonenumber': "phonenumber" // 0637966241
-        })
-        .then((value) => print("User Added"))
-        .catchError((error) => print("Failed to add user: $error"));
+        .where('UID', isEqualTo: userCredential.user.uid)
+        .get();
+    debugPrint('${query.docs.first.data()}');
   }
 }
 

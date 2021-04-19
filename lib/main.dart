@@ -8,23 +8,23 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  FirebaseAuth auth = FirebaseAuth.instance;
-  try {
-    final UserCredential userCredential =
-        await auth.createUserWithEmailAndPassword(
-      email: "barry.allen@example.com",
-      password: "SuperSecretPassword!",
-    );
-    debugPrint('${userCredential.user.toString()}');
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'weak-password') {
-      print('The password provided is too weak.');
-    } else if (e.code == 'email-already-in-use') {
-      print('The account already exists for that email.');
-    }
-  } catch (e) {
-    print(e);
-  }
+  // FirebaseAuth auth = FirebaseAuth.instance;
+  // try {
+  //   final UserCredential userCredential =
+  //       await auth.createUserWithEmailAndPassword(
+  //     email: "barry.allen@example.com",
+  //     password: "SuperSecretPassword!",
+  //   );
+  //   debugPrint('${userCredential.user.toString()}');
+  // } on FirebaseAuthException catch (e) {
+  //   if (e.code == 'weak-password') {
+  //     print('The password provided is too weak.');
+  //   } else if (e.code == 'email-already-in-use') {
+  //     print('The account already exists for that email.');
+  //   }
+  // } catch (e) {
+  //   print(e);
+  // }
 
   /////////////////////// Signin  //////////////////////////////
   // UserCredential userCredential;
@@ -42,23 +42,23 @@ Future<void> main() async {
   //   }
   // }
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
-  firestore
-      .collection('Usertable')
-      .doc('User')
-      .get()
-      .then((DocumentSnapshot document) => debugPrint('${document.data()}'));
+  // FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // firestore
+  //     .collection('Usertable')
+  //     .doc('User')
+  //     .get()
+  //     .then((DocumentSnapshot document) => debugPrint('${document.data()}'));
 
-  firestore
-      .collection('Usertable')
-      .add({
-        //'UID': "${userCredential.user.uid}",
-        'full_name': "fullName", // name
-        'password': "passworf", // Stokes and Sons
-        'phonenumber': "phonenumber" // 0637966241
-      })
-      .then((value) => print("User Added"))
-      .catchError((error) => print("Failed to add user: $error"));
+  // firestore
+  //     .collection('Usertable')
+  //     .add({
+  //       //'UID': "${userCredential.user.uid}",
+  //       'full_name': "fullName", // name
+  //       'password': "passworf", // Stokes and Sons
+  //       'phonenumber': "phonenumber" // 0637966241
+  //     })
+  //     .then((value) => print("User Added"))
+  //     .catchError((error) => print("Failed to add user: $error"));
   // FirebaseFirestore.instance.settings = const Settings(
   //   host: 'localhost:8080',
   //   sslEnabled: false,

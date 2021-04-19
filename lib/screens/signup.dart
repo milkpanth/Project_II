@@ -112,7 +112,7 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String chooseType;
   String name, email, password;
-  String phonenum;
+  String phonenumber;
 
   @override
   Widget build(BuildContext context) {
@@ -148,21 +148,21 @@ class _SignUpState extends State<SignUp> {
         width: 250.0,
         child: RaisedButton(
           color: MyStyle().buttonColor,
-          onPressed: Signupwithfirebase() 
-          {
+          onPressed: () async {
             print(
-                'name = $name, email = $email, password = $password, phonenum = $phonenum, choosType = $chooseType');
+                'name = $name, email = $email, password = $password, phonenumber = $phonenumber, choosType = $chooseType');
             if (name == null ||
                 name.isEmpty ||
                 email == null ||
                 email.isEmpty ||
                 password == null ||
                 password.isEmpty ||
-                phonenum == null ||
-                phonenum.isEmpty) {
+                phonenumber == null ||
+                phonenumber.isEmpty) {
               print('กรุณากรอกข้อมูลให้ครบด้วยค่ะ');
               normalDialog(context, 'กรุณากรอกข้อมูลให้ครบด้วยค่ะ');
             }
+            await signupwithfirebase();
           },
           child: Text(
             'Register',
@@ -302,7 +302,7 @@ class _SignUpState extends State<SignUp> {
           Container(
               width: 250.0,
               child: TextField(
-                onChanged: (value) => phonenum = value.trim(),
+                onChanged: (value) => phonenumber = value.trim(),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.phone,
@@ -336,14 +336,11 @@ class _SignUpState extends State<SignUp> {
         ],
       );
 
-  void Signupwithfirebase() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-
+  Future<void> signupwithfirebase() async {
     FirebaseAuth auth = FirebaseAuth.instance;
+    UserCredential userCredential;
     try {
-      final UserCredential userCredential =
-          await auth.createUserWithEmailAndPassword(
+      userCredential = await auth.createUserWithEmailAndPassword(
         email: "$email",
         password: "$password",
       );
@@ -358,21 +355,16 @@ class _SignUpState extends State<SignUp> {
       print(e);
     }
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    // firestore
-    //     .collection('Usertable')
-    //     .doc('User')
-    //     .get()
-    //     .then((DocumentSnapshot document) => debugPrint('${document.data()}'));
 
     firestore
         .collection('Usertable')
         .add({
-          //'UID': "${userCredential.user.uid}",
-          'full_name': "fullName", // nicha
-          'email': "email", // nicha@gmail.com
-          'password': "password", // password
-          'phonenumber': "phonenumber", // 0637966241
-          'chooseType': "" // user or shop
+          'UID': "${userCredential.user.uid}",
+          'full_name': "$name", // nicha
+          'email': "$email", // nicha@gmail.com
+          'password': "$password", // password
+          'phonenumber': "$phonenumber", // 0637966241
+          'chooseType': "$chooseType" // user or shop
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
