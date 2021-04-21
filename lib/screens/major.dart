@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gastogo/models/product_model.dart';
 import 'package:gastogo/screens/summary.dart';
+import 'package:gastogo/utility/global_var.dart';
 import 'package:gastogo/utility/my_style.dart';
 
 class Major extends StatefulWidget {
@@ -7,6 +10,25 @@ class Major extends StatefulWidget {
 }
 
 class MajorState extends State<Major> {
+  @override
+  void initState() {
+    super.initState();
+    getProduct();
+  }
+
+  Future<void> getProduct() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    QuerySnapshot query = await firestore.collection('product').get();
+    for (QueryDocumentSnapshot doc in query.docs) {
+      final ProductModel product = ProductModel.fromJson(doc.data());
+      productList.add(product);
+    }
+    setState(() {
+      productSelected = productList[0];
+    });
+    debugPrint('$productList');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,23 +82,32 @@ class MajorState extends State<Major> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
+                      children: List.generate(2, (index) {
+                        ProductModel product = productList[index];
+                        return Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              print('ยูนิคแก๊ส');
+                              print(product.nameTh);
+                              setState(() {
+                                productSelected = product;
+                                totalPrice = product.detail[0].price.toDouble();
+                              });
                             },
                             child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5),
                               padding: EdgeInsets.symmetric(
                                 horizontal: 15,
                                 vertical: 10,
                               ),
                               decoration: BoxDecoration(
-                                  color: Colors.blue[300],
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
+                                color: productSelected.id == product.id
+                                    ? Colors.blue[700]
+                                    : Colors.blue[300],
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: Text(
-                                'ยูนิคแก๊ส',
+                                '${product.nameTh}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyStyle().gastext,
@@ -86,89 +117,40 @@ class MajorState extends State<Major> {
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print('สยามแก๊ส');
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.blue[300],
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text(
-                                'สยามแก๊ส',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        );
+                      }),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
+                      children: List.generate(2, (index) {
+                        ProductModel product = productList[2 + index];
+                        return Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              print('ปตท');
+                              print(product.nameTh);
+                              setState(() {
+                                productSelected = product;
+                                totalPrice = product.detail[0].price.toDouble();
+                              });
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 25,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                  color: Colors.blue[300],
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
-                              child: Text(
-                                'ปตท',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print('เวิลด์แก๊ส');
-                            },
-                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5),
                               padding: EdgeInsets.symmetric(
                                 horizontal: 15,
                                 vertical: 10,
                               ),
                               decoration: BoxDecoration(
-                                  color: Colors.blue[300],
-                                  border: Border.all(),
-                                  borderRadius: BorderRadius.circular(10)),
+                                color: productSelected.id == product.id
+                                    ? Colors.blue[700]
+                                    : Colors.blue[300],
+                                border: Border.all(),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: Text(
-                                'เวิลด์แก๊ส',
+                                '${product.nameTh}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyStyle().gastext,
@@ -178,9 +160,9 @@ class MajorState extends State<Major> {
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
+                        );
+                      }),
+                    ),
                   ],
                 ),
               ),
@@ -195,10 +177,9 @@ class MajorState extends State<Major> {
                   vertical: 10,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.lightBlue[200],
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(10)),
-                ),
+                    color: Colors.lightBlue[200],
+                    border: Border.all(),
+                    borderRadius: BorderRadius.circular(10)),
                 //width: 200,
                 child: Column(
                   children: <Widget>[
@@ -215,21 +196,34 @@ class MajorState extends State<Major> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
+                      children: List.generate(2, (index) {
+                        double price =
+                            productSelected.detail[index].price.toDouble();
+                        int size = productSelected.detail[index].size;
+                        String unit = productSelected.sizeUnit;
+                        return Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              print('4 กก.');
+                              print('$size $unit');
+                              setState(() {
+                                sizeSelected = size;
+                                totalPrice = price;
+                              });
                             },
                             child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5),
                               padding: EdgeInsets.symmetric(
                                   horizontal: 25, vertical: 10),
                               decoration: BoxDecoration(
-                                color: Colors.blue[300],
+                                color: sizeSelected == size
+                                    ? Colors.blue[700]
+                                    : Colors.blue[300],
                                 border: Border.all(),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                '4 กก.',
+                                '$size $unit',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyStyle().gastext,
                                   fontSize: 18,
@@ -238,59 +232,42 @@ class MajorState extends State<Major> {
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print('7 กก.');
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.blue[300],
-                                border: Border.all(),
-                              ),
-                              child: Text(
-                                '7 กก.',
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
+                        );
+                      }),
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Expanded(
+                      children: List.generate(2, (index) {
+                        double price =
+                            productSelected.detail[index + 2].price.toDouble();
+                        int size = productSelected.detail[index + 2].size;
+                        String unit = productSelected.sizeUnit;
+                        return Expanded(
                           child: GestureDetector(
                             onTap: () {
-                              print('15 กก.');
+                              print('$size $unit');
+                              setState(() {
+                                sizeSelected = size;
+                                totalPrice = price;
+                              });
                             },
                             child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 5),
                               padding: EdgeInsets.symmetric(
-                                horizontal: 25,
-                                vertical: 10,
-                              ),
+                                  horizontal: 25, vertical: 10),
                               decoration: BoxDecoration(
-                                color: Colors.blue[300],
+                                color: sizeSelected == size
+                                    ? Colors.blue[700]
+                                    : Colors.blue[300],
                                 border: Border.all(),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                '15 กก.',
+                                '$size $unit',
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: MyStyle().gastext,
                                   fontSize: 18,
@@ -299,37 +276,9 @@ class MajorState extends State<Major> {
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print('48 กก.');
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.blue[300],
-                                border: Border.all(),
-                              ),
-                              child: Text(
-                                '48 กก.',
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                        );
+                      }),
+                    ),
                   ],
                 ),
               ),
@@ -339,7 +288,7 @@ class MajorState extends State<Major> {
                 child: Column(
                   children: <Widget>[
                     Text(
-                      'ToTal ............. Bath',
+                      'ToTal $totalPrice Bath',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gastogo/models/user_model.dart';
 import 'package:gastogo/screens/major.dart';
+import 'package:gastogo/utility/global_var.dart';
 // import 'package:gastogo/screens/signingg.dart';
 import 'package:gastogo/utility/my_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -132,10 +134,11 @@ class _SignInState extends State<SignIn> {
       }
     }
     QuerySnapshot query = await firestore
-        .collection('Usertable')
+        .collection('User')
         .where('UID', isEqualTo: userCredential.user.uid)
         .get();
-    debugPrint('${query.docs.first.data()}');
+    userData = UserModel.fromJson(query.docs.first.data());
+    debugPrint('${userData.toJson()}');
   }
 }
 

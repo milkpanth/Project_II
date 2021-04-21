@@ -357,13 +357,13 @@ class _SignUpState extends State<SignUp> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
 
     firestore
-        .collection('Usertable')
+        .collection('User')
         .add({
           'UID': "${userCredential.user.uid}",
-          'full_name': "$name", // nicha
+          'fullName': "$name", // nicha
           'email': "$email", // nicha@gmail.com
           'password': "$password", // password
-          'phonenumber': "$phonenumber", // 0637966241
+          'phoneNumber': "$phonenumber", // 0637966241
           'chooseType': "$chooseType" // user or shop
         })
         .then((value) => print("User Added"))
