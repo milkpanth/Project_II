@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gastogo/utility/my_style.dart';
 
 class Promote extends StatefulWidget {
   PromoteState createState() => PromoteState();

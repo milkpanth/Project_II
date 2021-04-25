@@ -53,12 +53,30 @@ class _SignInState extends State<SignIn> {
 
   Widget loginButton() => Container(
         width: 250.0,
-        child: RaisedButton(
-          color: MyStyle().buttonColor,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: MyStyle().buttonColor,
+          ),
           onPressed: () async {
             await loginwithfirebase();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Major()));
+            if (userData.chooseType == 'Shop') {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      Major(), //ไปที่แสดงข้อมูลออเดอร์ที่เข้ามา
+                  // builder: (context) => ShowMap(),
+                ),
+              );
+            } else {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Major(),
+                  // builder: (context) => ShowMap(),
+                ),
+              );
+            }
           },
           child: Text(
             'Log In',

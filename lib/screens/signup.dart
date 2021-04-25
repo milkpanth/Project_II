@@ -100,7 +100,6 @@
 import 'package:flutter/material.dart';
 import 'package:gastogo/utility/my_style.dart';
 import 'package:gastogo/utility/normal_dialog.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -146,8 +145,8 @@ class _SignUpState extends State<SignUp> {
 
   Widget registerButton() => Container(
         width: 250.0,
-        child: RaisedButton(
-          color: MyStyle().buttonColor,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(primary: MyStyle().buttonColor),
           onPressed: () async {
             print(
                 'name = $name, email = $email, password = $password, phonenumber = $phonenumber, choosType = $chooseType');

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gastogo/screens/showmap.dart';
 import 'package:gastogo/utility/my_style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gastogo/models/product_model.dart';
 import 'package:gastogo/utility/global_var.dart';
-import 'package:gastogo/utility/my_style.dart';
-import 'package:gastogo/screens/showmap.dart';
 
 class Summary extends StatefulWidget {
   SummaryState createState() => SummaryState();
@@ -105,11 +104,26 @@ class SummaryState extends State<Summary> {
                     ),
                     Container(
                       padding: EdgeInsets.all(25),
-                      // child: Image.asset(
-                      //   'images/logo.jpg',
-                      //   height: 200,
-                      //   width: 200,
-                      //),
+                      width: 250.0,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: MyStyle().buttonColor,
+                        ),
+                        onPressed: () async {
+                          //await loginwithfirebase();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ShowMap(),
+                              // builder: (context) => ShowMap(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'เพิ่มสถานที่จัดส่ง',
+                          style: TextStyle(color: MyStyle().lighttextColor),
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MyStyle {
   Color textColor = Colors.blue[800];
   Color primaryColor = Colors.green;
-  Color buttonColor = Colors.blue[300];
+  Color buttonColor = Colors.blue[600];
   Color darktextColor = Colors.black;
   Color lighttextColor = Colors.white;
   Color gastext = Colors.black;

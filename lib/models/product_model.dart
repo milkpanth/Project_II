@@ -11,7 +11,7 @@ class ProductModel {
     id = json['id'];
     nameTh = json['nameTh'];
     if (json['detail'] != null) {
-      detail = new List<Detail>();
+      detail = [];
       json['detail'].forEach((v) {
         detail.add(new Detail.fromJson(v));
       });

@@ -3,7 +3,6 @@ import 'package:gastogo/screens/promote.dart';
 import 'package:gastogo/screens/signin.dart';
 import 'package:gastogo/screens/signup.dart';
 import 'package:gastogo/utility/my_style.dart';
-import 'package:gastogo/screens/major.dart';
 
 class Home extends StatefulWidget {
   @override

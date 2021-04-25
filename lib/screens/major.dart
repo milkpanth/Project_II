@@ -13,7 +13,9 @@ class MajorState extends State<Major> {
   @override
   void initState() {
     super.initState();
-    getProduct();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await getProduct();
+    });
   }
 
   Future<void> getProduct() async {
@@ -80,89 +82,93 @@ class MajorState extends State<Major> {
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(2, (index) {
-                        ProductModel product = productList[index];
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print(product.nameTh);
-                              setState(() {
-                                productSelected = product;
-                                totalPrice = product.detail[0].price.toDouble();
-                              });
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: productSelected.id == product.id
-                                    ? Colors.blue[700]
-                                    : Colors.blue[300],
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '${product.nameTh}',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
+                    if (productList.isNotEmpty)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(2, (index) {
+                          ProductModel product = productList[index];
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                print(product.nameTh);
+                                setState(() {
+                                  productSelected = product;
+                                  totalPrice =
+                                      product.detail[0].price.toDouble();
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: productSelected.id == product.id
+                                      ? Colors.blue[700]
+                                      : Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '${product.nameTh}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyStyle().gastext,
+                                    fontSize: 18,
+                                    //fontWeight: FontWeight.bold
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
+                          );
+                        }),
+                      ),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(2, (index) {
-                        ProductModel product = productList[2 + index];
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print(product.nameTh);
-                              setState(() {
-                                productSelected = product;
-                                totalPrice = product.detail[0].price.toDouble();
-                              });
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5),
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                color: productSelected.id == product.id
-                                    ? Colors.blue[700]
-                                    : Colors.blue[300],
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '${product.nameTh}',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
+                    if (productList.isNotEmpty)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(2, (index) {
+                          ProductModel product = productList[2 + index];
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                print(product.nameTh);
+                                setState(() {
+                                  productSelected = product;
+                                  totalPrice =
+                                      product.detail[0].price.toDouble();
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: productSelected.id == product.id
+                                      ? Colors.blue[700]
+                                      : Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '${product.nameTh}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyStyle().gastext,
+                                    fontSize: 18,
+                                    //fontWeight: FontWeight.bold
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
+                          );
+                        }),
+                      ),
                   ],
                 ),
               ),
@@ -194,91 +200,93 @@ class MajorState extends State<Major> {
                         ),
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(2, (index) {
-                        double price =
-                            productSelected.detail[index].price.toDouble();
-                        int size = productSelected.detail[index].size;
-                        String unit = productSelected.sizeUnit;
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print('$size $unit');
-                              setState(() {
-                                sizeSelected = size;
-                                totalPrice = price;
-                              });
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: sizeSelected == size
-                                    ? Colors.blue[700]
-                                    : Colors.blue[300],
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '$size $unit',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
+                    if (productSelected != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(2, (index) {
+                          double price =
+                              productSelected.detail[index].price.toDouble();
+                          int size = productSelected.detail[index].size;
+                          String unit = productSelected.sizeUnit;
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                print('$size $unit');
+                                setState(() {
+                                  sizeSelected = size;
+                                  totalPrice = price;
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: sizeSelected == size
+                                      ? Colors.blue[700]
+                                      : Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '$size $unit',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyStyle().gastext,
+                                    fontSize: 18,
+                                    //fontWeight: FontWeight.bold
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
+                          );
+                        }),
+                      ),
                     SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(2, (index) {
-                        double price =
-                            productSelected.detail[index + 2].price.toDouble();
-                        int size = productSelected.detail[index + 2].size;
-                        String unit = productSelected.sizeUnit;
-                        return Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              print('$size $unit');
-                              setState(() {
-                                sizeSelected = size;
-                                totalPrice = price;
-                              });
-                            },
-                            child: Container(
-                              margin: EdgeInsets.symmetric(horizontal: 5),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 25, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: sizeSelected == size
-                                    ? Colors.blue[700]
-                                    : Colors.blue[300],
-                                border: Border.all(),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                '$size $unit',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: MyStyle().gastext,
-                                  fontSize: 18,
-                                  //fontWeight: FontWeight.bold
+                    if (productSelected != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(2, (index) {
+                          double price = productSelected.detail[index + 2].price
+                              .toDouble();
+                          int size = productSelected.detail[index + 2].size;
+                          String unit = productSelected.sizeUnit;
+                          return Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                print('$size $unit');
+                                setState(() {
+                                  sizeSelected = size;
+                                  totalPrice = price;
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: sizeSelected == size
+                                      ? Colors.blue[700]
+                                      : Colors.blue[300],
+                                  border: Border.all(),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  '$size $unit',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: MyStyle().gastext,
+                                    fontSize: 18,
+                                    //fontWeight: FontWeight.bold
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
-                    ),
+                          );
+                        }),
+                      ),
                   ],
                 ),
               ),
@@ -316,9 +324,10 @@ class MajorState extends State<Major> {
               Container(
                 height: 50.0,
                 width: 250.0,
-                child: RaisedButton(
-                  //color: MyStyle().buttonColor,
-                  color: Colors.blue,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                  ),
                   onPressed: () => setState(() {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Summary()));
