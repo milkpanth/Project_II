@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:gastogo/utility/global_var.dart';
 import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,6 +12,17 @@ class ShowMap extends StatefulWidget {
 class ShowMapState extends State<ShowMap> {
   LocationData currentLocation;
   Completer<GoogleMapController> _controller = Completer();
+  Set<Marker> _myMarker = Set();
+  LatLng _mapLocation;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final LocationData locationData = await getCurrentLocation();
+      _onMarkLocation(locationData.latitude, locationData.longitude);
+    });
+  }
 
   static const LatLng centerMap = const LatLng(13.667708, 100.621809);
 
@@ -26,6 +38,15 @@ class ShowMapState extends State<ShowMap> {
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
 
+  Set<Marker> myMarker() {
+    return <Marker>[
+      Marker(
+        markerId: MarkerId('Order Map'),
+        position: LatLng(13.915161, 100.521627),
+      )
+    ].toSet();
+  }
+
   Widget myMap() {
     return GoogleMap(
       mapType: MapType.hybrid,
@@ -33,7 +54,29 @@ class ShowMapState extends State<ShowMap> {
       onMapCreated: (GoogleMapController controller) {
         _controller.complete(controller);
       },
+      onCameraMove: _onCameraMove,
+      markers: _myMarker,
     );
+  }
+
+  void _onCameraMove(CameraPosition position) {
+    debugPrint('${position.target.latitude} : ${position.target.longitude}');
+    _mapLocation = position.target;
+    debugPrint('map location ===> $_mapLocation');
+  }
+
+  void _onMarkLocation(double latitude, double longitude) {
+    if (_myMarker.isNotEmpty) {
+      _myMarker.clear();
+    }
+    _myMarker.add(
+      Marker(
+        markerId: MarkerId('Order Map'),
+        position: LatLng(latitude, longitude),
+      ),
+    );
+    markLocation = LatLng(latitude, longitude);
+    setState(() {});
   }
 
   double lat, lng;
@@ -78,14 +121,34 @@ class ShowMapState extends State<ShowMap> {
       appBar: AppBar(
         title: Text('Map'),
       ),
-      body: myMap(),
+      body: Stack(
+        children: [
+          myMap(),
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 50),
+              child: Icon(
+                Icons.pin_drop,
+                color: Colors.red,
+              ),
+            ),
+          )
+        ],
+      ),
       // floatingActionButton: FloatingActionButton.extended(
       //   onPressed: _goMyLocation,
       //   label: Text('My Location!'),
       //   icon: Icon(Icons.map_outlined),
       // ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToMe,
+        onPressed: () {
+          _onMarkLocation(
+            _mapLocation.latitude,
+            _mapLocation.longitude,
+          );
+          setState(() {});
+        },
         label: Text('My location'),
         icon: Icon(Icons.near_me),
       ),

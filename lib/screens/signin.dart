@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gastogo/models/user_model.dart';
 import 'package:gastogo/screens/major.dart';
+import 'package:gastogo/screens/order.dart';
 import 'package:gastogo/utility/global_var.dart';
 // import 'package:gastogo/screens/signingg.dart';
 import 'package:gastogo/utility/my_style.dart';
@@ -64,8 +65,7 @@ class _SignInState extends State<SignIn> {
                 context,
                 MaterialPageRoute(
                   builder: (context) =>
-                      Major(), //ไปที่แสดงข้อมูลออเดอร์ที่เข้ามา
-                  // builder: (context) => ShowMap(),
+                      OrderShop(), //ไปที่แสดงข้อมูลออเดอร์ที่เข้ามา
                 ),
               );
             } else {

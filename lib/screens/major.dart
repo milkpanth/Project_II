@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gastogo/models/product_model.dart';
+import 'package:gastogo/screens/signin.dart';
 import 'package:gastogo/screens/summary.dart';
 import 'package:gastogo/utility/global_var.dart';
 import 'package:gastogo/utility/my_style.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Major extends StatefulWidget {
   MajorState createState() => MajorState();
@@ -31,11 +35,20 @@ class MajorState extends State<Major> {
     debugPrint('$productList');
   }
 
+  Future<Null> signOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.clear();
+    exit(0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('สั่งซื้อสินค้า'),
+        actions: <Widget>[
+          IconButton(onPressed: () => signOut(), icon: Icon(Icons.exit_to_app))
+        ],
       ),
       body: ListView(
         children: <Widget>[

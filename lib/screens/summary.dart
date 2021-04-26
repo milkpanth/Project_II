@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gastogo/screens/order.dart';
 import 'package:gastogo/screens/showmap.dart';
+import 'package:gastogo/screens/status.dart';
 import 'package:gastogo/utility/my_style.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gastogo/models/product_model.dart';
@@ -88,7 +90,7 @@ class SummaryState extends State<Summary> {
                               ),
                             ),
                             SizedBox(
-                              height: 22,
+                              height: 25,
                             ),
                             Text(
                               'รวมราคาทั้งหมด $totalPrice บาท',
@@ -101,6 +103,9 @@ class SummaryState extends State<Summary> {
                           ],
                         ),
                       ],
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     Container(
                       padding: EdgeInsets.all(25),
@@ -126,6 +131,52 @@ class SummaryState extends State<Summary> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              SizedBox(
+                height: 70,
+              ),
+              Container(
+                height: 50.0,
+                width: 250.0,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                  ),
+                  onPressed: () {
+                    FirebaseFirestore firestore = FirebaseFirestore.instance;
+                    final now = new DateTime.now();
+
+    firestore
+        .collection('Order')
+        .add({
+          'user': "${userData.uID}",
+          'fullName': "${userData.fullName}", // nicha
+          'product': "${productSelected.nameTh}", // nicha@gmail.com
+          'size': "$sizeSelected", // password
+          'sizeUnit': "${productSelected.sizeUnit}", // 0637966241
+          'mark': {
+            "lat": markLocation.latitude,
+            "long":markLocation.longitude
+          }, // user or shop
+          'orderDate': now.toIso8601String()
+        })
+        .then((value) => print("User Added"))
+        .catchError((error) => print("Failed to add user: $error"));
+                     setState(() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => StatusOrder()),
+                    );
+                  });
+                  },
+                  child: Text(
+                    'ยืนยันการส่ังซื้อ',
+                    style: TextStyle(
+                        color: MyStyle().darktextColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,),
+                  ),
                 ),
               ),
             ],
